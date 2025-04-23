@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RideRent | Premium Car & Bike Rentals</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .feedback-section {
+        padding: 80px 0;
+        background-color: var(--light);
+      }
+
+      .dark-mode .feedback-section {
+        background-color: var(--dark);
+      }
+
+      .feedback-form {
+        max-width: 600px;
+        margin: 0 auto 40px;
+        padding: 30px;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+      }
+
+      .dark-mode .feedback-form {
+        background-color: rgba(19, 21, 21, 0.8);
+      }
+
+      .star-rating {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .star-rating i {
+        font-size: 24px;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .star-rating i.active {
+        color: #ffd700;
+      }
+
+      .feedback-input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        resize: vertical;
+      }
+
+      .dark-mode .feedback-input {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: var(--light);
+      }
+
+      .feedback-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .feedback-card {
+        background: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+      }
+
+      .dark-mode .feedback-card {
+        background-color: rgba(19, 21, 21, 0.8);
+      }
+
+      .feedback-card .stars {
+        color: #ffd700;
+        margin-bottom: 10px;
+      }
+
+      .feedback-card .date {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 10px;
+      }
+
+      .dark-mode .feedback-card .date {
+        color: #999;
+      }
+
+      .top-banner {
+        background-color: var(--primary);
+        color: var(--light);
+        padding: 10px 0;
+        font-size: 14px;
+        position: relative;
+        z-index: 1000;
+      }
+
+      .top-banner-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .top-banner-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .top-banner-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .top-banner-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .top-banner-item i {
+        font-size: 16px;
+      }
+
+      .top-banner-item a {
+        color: var(--light);
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .top-banner-item a:hover {
+        opacity: 0.8;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+      }
+
+      .social-links a {
+        color: var(--light);
+        font-size: 16px;
+        transition: opacity 0.3s ease;
+      }
+
+      .social-links a:hover {
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
+        .top-banner-content {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+
+        .top-banner-left,
+        .top-banner-right {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .social-links {
+          justify-content: center;
+        }
+      }
+
+      .video-testimonials {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 60px 0;
+        background-color: transparent;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .video-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .testimonial-video {
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .testimonial-video:hover {
+        transform: scale(1.08) translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .testimonial-video::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(0,0,0,0.2), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .testimonial-video:hover::after {
+        opacity: 1;
+      }
+
+      .portrait {
+        width: 280px;
+        height: 400px;
+        object-fit: cover;
+      }
+
+      .landscape {
+        width: 500px;
+        height: 300px;
+        object-fit: cover;
+      }
+
+      .full-screen-video {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .full-screen-video video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .glass-box {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 20px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        transition: background 0.3s ease;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+      }
+
+      .btn-secondary {
+        background-color: var(--primary);
+      }
+
+      .btn:hover {
+        opacity: 0.8;
+      }
+
+      @media (max-width: 1200px) {
+        .video-row {
+          gap: 15px;
+        }
+        
+        .portrait {
+          width: 240px;
+          height: 340px;
+        }
+        
+        .landscape {
+          width: 420px;
+          height: 250px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .video-row {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .portrait, .landscape {
+          width: 90%;
+          height: auto;
+          max-width: 400px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="theme-toggle">
+      <i class="fas fa-moon"></i>
+      <i class="fas fa-sun"></i>
+      <div class="toggle-ball"></div>
+    </div>
+
+    <header>
+      <div class="container">
+        <nav>
+          <div class="logo">
+            <h1><span>Ride</span>Rent</h1>
+          </div>
+          <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="cars.html">Cars</a></li>
+            <li><a href="bikes.html">Bikes</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+          <div class="auth-buttons">
+            <a href="login.html" class="btn btn-primary">Login</a>
+            <a href="signup.html" class="btn btn-primary">Sign Up</a>
+          </div>
+          <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <section class="full-screen-video">
+      <video autoplay muted loop>
+        <source src="https://ik.imagekit.io/r5wsp5fo2/final_header.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="glass-box">
+        <h2>Welcome to RideRent – Drive Your Way!</h2>
+        <p>
+          Looking for a reliable, affordable, and hassle-free car rental
+          service? <br />
+          You've come to the right place.
+        </p>
+
+        <p>
+          Experience comfort, convenience, and complete control over your
+          journey.<br />
+          <strong
+            >Book your ride today and hit the road with confidence!</strong
+          >
+        </p>
+        <div class="button-group">
+          <a href="pages/cars.html" class="btn btn-primary">Explore Us</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-choose-us">
+      <div class="container">
+        <h2>Why Choose Us</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Safety Guaranteed</h3>
+            <p>
+              All our vehicles undergo rigorous safety inspections before each
+              rental.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-hand-holding-usd"></i></div>
+            <h3>Best Price</h3>
+            <p>We offer competitive rates with no hidden charges or fees.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-headset"></i></div>
+            <h3>24/7 Support</h3>
+            <p>
+              Our customer support team is available around the clock to assist
+              you.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-map-marked-alt"></i></div>
+            <h3>Multiple Locations</h3>
+            <p>
+              Pick-up and drop-off your vehicle at any of our convenient
+              locations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feedback-section">
+      <div class="container">
+        <h2>Customer Feedback</h2>
+        <div class="feedback-form">
+          <h3>Leave Your Feedback</h3>
+          <div class="star-rating">
+            <i class="fas fa-star" data-rating="1"></i>
+            <i class="fas fa-star" data-rating="2"></i>
+            <i class="fas fa-star" data-rating="3"></i>
+            <i class="fas fa-star" data-rating="4"></i>
+            <i class="fas fa-star" data-rating="5"></i>
+          </div>
+          <textarea
+            class="feedback-input"
+            id="feedback-text"
+            placeholder="Share your experience..."
+            rows="4"
+          ></textarea>
+          <button class="btn btn-primary" id="submit-feedback">
+            Submit Feedback
+          </button>
+        </div>
+        <div class="feedback-display" id="feedback-display">
+          <!-- Feedback cards will be displayed here -->
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="container">
+        <h2>What Our Customers Experience</h2>
+        <div class="video-testimonials">
+          <div class="video-row">
+            <video autoplay muted loop playsinline class="testimonial-video portrait">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <video autoplay muted loop playsinline class="testimonial-video portrait">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd5.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <video autoplay muted loop playsinline class="testimonial-video portrait">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd3.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <video autoplay muted loop playsinline class="testimonial-video portrait">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd4.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="video-row">
+            <video autoplay muted loop playsinline class="testimonial-video landscape">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <video autoplay muted loop playsinline class="testimonial-video landscape">
+              <source src="https://ik.imagekit.io/r5wsp5fo2/vd6.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Join Our Newsletter</h2>
+          <p>
+            Subscribe to our newsletter to receive updates on our latest offers
+            and promotions.
+          </p>
+          <form id="newsletter-form">
+            <input type="email" placeholder="Enter your email" required />
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section about">
+            <h3>About RideRent</h3>
+            <p>
+              We provide premium car and bike rental services with a focus on
+              quality, reliability, and customer satisfaction.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="cars.html">Cars</a></li>
+              <li><a href="bikes.html">Bikes</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="terms.html">Terms & Conditions</a></li>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-section contact">
+            <h3>Contact Us</h3>
+            <p>
+              <i class="fas fa-map-marker-alt"></i> 123 Main Street, City,
+              Country
+            </p>
+            <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            <p><i class="fas fa-envelope"></i> info@riderent.com</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2023 RideRent. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="vehicles-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+      // Feedback functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        const stars = document.querySelectorAll(".star-rating i");
+        const feedbackText = document.getElementById("feedback-text");
+        const submitButton = document.getElementById("submit-feedback");
+        const feedbackDisplay = document.getElementById("feedback-display");
+        let selectedRating = 0;
+
+        // Load existing feedback from localStorage
+        const feedbacks = JSON.parse(localStorage.getItem("feedbacks") || "[]");
+        displayFeedbacks(feedbacks);
+
+        // Star rating functionality
+        stars.forEach((star) => {
+          star.addEventListener("mouseover", () => {
+            const rating = parseInt(star.dataset.rating);
+            highlightStars(rating);
+          });
+
+          star.addEventListener("mouseout", () => {
+            highlightStars(selectedRating);
+          });
+
+          star.addEventListener("click", () => {
+            selectedRating = parseInt(star.dataset.rating);
+            highlightStars(selectedRating);
+          });
+        });
+
+        // Submit feedback
+        submitButton.addEventListener("click", () => {
+          if (selectedRating === 0) {
+            alert("Please select a rating");
+            return;
+          }
+
+          if (!feedbackText.value.trim()) {
+            alert("Please enter your feedback");
+            return;
+          }
+
+          const newFeedback = {
+            rating: selectedRating,
+            text: feedbackText.value.trim(),
+            date: new Date().toISOString(),
+            id: Date.now(),
+          };
+
+          feedbacks.unshift(newFeedback);
+          localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+
+          // Reset form
+          selectedRating = 0;
+          feedbackText.value = "";
+          highlightStars(0);
+
+          // Update display
+          displayFeedbacks(feedbacks);
+        });
+
+        function highlightStars(rating) {
+          stars.forEach((star) => {
+            const starRating = parseInt(star.dataset.rating);
+            star.classList.toggle("active", starRating <= rating);
+          });
+        }
+
+        function displayFeedbacks(feedbacks) {
+          feedbackDisplay.innerHTML = feedbacks
+            .map(
+              (feedback) => `
+                    <div class="feedback-card">
+                        <div class="stars">
+                            ${Array(5)
+                              .fill("")
+                              .map(
+                                (_, i) =>
+                                  `<i class="fas fa-star${
+                                    i < feedback.rating ? " active" : ""
+                                  }"></i>`
+                              )
+                              .join("")}
+                        </div>
+                        <p>${feedback.text}</p>
+                        <div class="date">${new Date(
+                          feedback.date
+                        ).toLocaleDateString()}</div>
+                    </div>
+                `
+            )
+            .join("");
+        }
+      });
+
+      // Login
+      async function login(email, password) {
+        const response = await fetch("/handlers/login.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+        return await response.json();
+      }
+
+      // Search vehicles
+      async function searchVehicles(type, pickupDate, returnDate) {
+        const response = await fetch("/api/search.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type,
+            pickup_date: pickupDate,
+            return_date: returnDate,
+          }),
+        });
+        return await response.json();
+      }
+
+      // Create booking
+      async function createBooking(
+        vehicleId,
+        pickupDate,
+        returnDate,
+        pickupLocation
+      ) {
+        const response = await fetch("/api/book.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vehicle_id: vehicleId,
+            pickup_date: pickupDate,
+            return_date: returnDate,
+            pickup_location: pickupLocation,
+          }),
+        });
+        return await response.json();
+      }
+
+      // Submit feedback
+      async function submitFeedback(vehicleId, rating, comment) {
+        const response = await fetch("/api/feedback.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vehicle_id: vehicleId,
+            rating,
+            comment,
+          }),
+        });
+        return await response.json();
+      }
+    </script>
+  </body>
+</html>

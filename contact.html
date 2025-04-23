@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | RideRent</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .contact-section {
+            padding: 150px 0 80px;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .contact-header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .contact-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+
+        .contact-form-wrapper {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .contact-form-wrapper {
+            background-color: rgba(19, 21, 21, 0.8);
+        }
+
+        .contact-form h2 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .contact-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-group input,
+        .dark-mode .form-group select,
+        .dark-mode .form-group textarea {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: var(--light);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .contact-info {
+            padding: 40px;
+            background-color: var(--primary);
+            color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(125, 226, 209, 0.3), transparent);
+            z-index: 1;
+        }
+
+        .contact-info-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-info h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .contact-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--light);
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .contact-info-item i {
+            font-size: 20px;
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        .contact-info-text h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .contact-info-text p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .contact-social {
+            margin-top: 30px;
+        }
+
+        .contact-social h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        .map-section {
+            margin-bottom: 80px;
+        }
+
+        .map-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .map-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .map-header p {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .offices-section {
+            margin-bottom: 80px;
+        }
+
+        .offices-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .offices-header h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .offices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .office-card {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .dark-mode .office-card {
+            background-color: rgba(19, 21, 21, 0.8);
+        }
+
+        .office-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .office-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .office-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .office-card:hover .office-image img {
+            transform: scale(1.1);
+        }
+
+        .office-details {
+            padding: 20px;
+        }
+
+        .office-details h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .office-details p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .office-details p i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .success-message {
+            display: none;
+            padding: 20px;
+            background-color: #dff0d8;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .dark-mode .success-message {
+            background-color: rgba(45, 136, 45, 0.2);
+        }
+
+        .success-message h3 {
+            color: #3c763d;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .success-message h3 {
+            color: #5cb85c;
+        }
+
+        @media (max-width: 992px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+        <div class="toggle-ball"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1><a href="../index.html"><span>Ride</span>Rent</a></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="cars.html">Cars</a></li>
+                    <li><a href="bikes.html">Bikes</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-secondary">Login</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-header">
+                <h1>Contact Us</h1>
+                <p>Have questions or need assistance? We're here to help. Reach out to our team through any of the channels below.</p>
+            </div>
+
+            <div class="contact-container">
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="booking">Booking Question</option>
+                                <option value="support">Customer Support</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="careers">Careers</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <div class="success-message" id="success-message">
+                            <h3>Message Sent!</h3>
+                            <p>Thank you for contacting us. We'll get back to you as soon as possible.</p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <div class="contact-info-content">
+                        <h2>Get in Touch</h2>
+                        <div class="contact-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-info-text">
+                                <h3>Our Headquarters</h3>
+                                <p>123 Main Street, Suite 400<br>San Francisco, CA 94105<br>United States</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <div class="contact-info-text">
+                                <h3>Phone</h3>
+                                <p>Customer Support: +1 (800) 123-4567<br>Booking Inquiries: +1 (800) 765-4321</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-info-text">
+                                <h3>Email</h3>
+                                <p>General Inquiries: info@riderent.com<br>Support: support@riderent.com<br>Careers: careers@riderent.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="contact-info-text">
+                                <h3>Business Hours</h3>
+                                <p>Monday - Friday: 8:00 AM - 8:00 PM<br>Saturday: 9:00 AM - 6:00 PM<br>Sunday: 10:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="contact-social">
+                            <h3>Follow Us</h3>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="offices-section">
+                <div class="offices-header">
+                    <h2>Our Main Offices</h2>
+                </div>
+                <div class="offices-grid">
+                    <div class="office-card">
+                        <div class="office-image">
+                            <img src="https://ik.imagekit.io/r5wsp5fo2/coming%20soon.avif?updatedAt=1745429627270" alt="San Francisco Office" onerror="this.src='https://via.placeholder.com/400x200?text=San+Francisco+Office'" class="img-fluid">
+                        </div>
+                        <div class="office-details">
+                            <h3>***** *****</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> -------------------</p>
+                            <p><i class="fas fa-phone"></i> +1 ***-***-***-*</p>
+                            <p><i class="fas fa-envelope"></i> *****@riderent.com</p>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="office-image">
+                            <img src="https://ik.imagekit.io/r5wsp5fo2/office.jpg?updatedAt=1745429630288" alt="New York Office" onerror="this.src='https://via.placeholder.com/400x200?text=New+York+Office'" class="img-fluid">
+                        </div>
+                        <div class="office-details">
+                            <h3>Punjab</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> law Gate, Floor 1, Phagwara, Punjab 14114</p>
+                            <p><i class="fas fa-phone"></i> +1 (800) 234-5678</p>
+                            <p><i class="fas fa-envelope"></i> phagwara@riderent.com</p>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="office-image">
+                            <img src="https://ik.imagekit.io/r5wsp5fo2/coming%20soon.avif?updatedAt=1745429627270" alt="Chicago Office" onerror="this.src='https://via.placeholder.com/400x200?text=Chicago+Office'" class="img-fluid">
+                        </div>
+                        <div class="office-details">
+                            <h3>***** *****</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> -------------------</p>
+                            <p><i class="fas fa-phone"></i>+1 ***-***-***-*</p>
+                            <p><i class="fas fa-envelope"></i> *****@riderent.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>About RideRent</h3>
+                    <p>We provide premium car and bike rental services with a focus on quality, reliability, and customer satisfaction.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="cars.html">Cars</a></li>
+                        <li><a href="bikes.html">Bikes</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                    <p><i class="fas fa-envelope"></i> info@riderent.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RideRent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check theme preference and initialize toggle ball position
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                const toggleBall = document.querySelector('.toggle-ball');
+                if (toggleBall) {
+                    toggleBall.style.transform = 'translateX(30px)';
+                }
+            }
+            
+            // Update auth buttons if user is logged in
+            updateAuthButtons();
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('success-message');
+            
+            // Theme toggle
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    
+                    // Move toggle ball
+                    const toggleBall = document.querySelector('.toggle-ball');
+                    if (toggleBall) {
+                        if (document.body.classList.contains('dark-mode')) {
+                            toggleBall.style.transform = 'translateX(30px)';
+                        } else {
+                            toggleBall.style.transform = 'translateX(0)';
+                        }
+                    }
+                    
+                    // Save theme preference
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                });
+            }
+            
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real application, this would send form data to a server
+                // For this demo, we'll simulate a successful form submission
+                
+                // Gather form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+                
+                // Simulate sending to server with a delay
+                setTimeout(() => {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html> 

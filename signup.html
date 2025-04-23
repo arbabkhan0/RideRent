@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RideRent Sign Up</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    .signup-container {
+      max-width: 500px;
+      margin: 120px auto 50px;
+      padding: 40px;
+      background-color: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease-in-out;
+      position: relative;
+    }
+
+    .dark-mode .signup-container {
+      background-color: var(--dark);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .signup-header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .signup-header h2 {
+      font-size: 32px;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .signup-header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: var(--dark);
+      transition: var(--transition);
+    }
+
+    .dark-mode .form-group label {
+      color: var(--light);
+    }
+
+    .form-group input {
+      padding: 12px;
+      border: 2px solid rgba(51, 153, 137, 0.2);
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      transition: var(--transition);
+      background-color: var(--light);
+      color: var(--dark);
+    }
+
+    .dark-mode .form-group input {
+      background-color: rgba(19, 21, 21, 0.8);
+      border-color: rgba(125, 226, 209, 0.2);
+      color: var(--light);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(51, 153, 137, 0.1);
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+      padding: 8px;
+      background-color: rgba(231, 76, 60, 0.1);
+      border-radius: var(--border-radius);
+    }
+
+    .success {
+      color: #2ecc71;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: rgba(46, 204, 113, 0.1);
+      border-radius: var(--border-radius);
+      display: none;
+    }
+
+    .password-strength {
+      height: 6px;
+      width: 100%;
+      background: rgba(51, 153, 137, 0.1);
+      border-radius: 10px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.4s ease;
+    }
+
+    .strength-text {
+      font-size: 14px;
+      margin-top: 5px;
+      color: var(--dark);
+      transition: var(--transition);
+    }
+
+    .dark-mode .strength-text {
+      color: var(--light);
+    }
+
+    .signup-button {
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      background-color: var(--primary);
+      color: var(--light);
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .signup-button:hover {
+      background-color: var(--secondary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .login-link a:hover {
+      color: var(--secondary);
+    }
+
+    @media (max-width: 768px) {
+      .signup-container {
+        margin: 100px 20px 30px;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+    <i class="fas fa-sun"></i>
+    <div class="toggle-ball"></div>
+  </div>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <h1><a href="../index.html"><span>Ride</span>Rent</a></h1>
+        </div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="cars.html">Cars</a></li>
+          <li><a href="bikes.html">Bikes</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-secondary">Login</a>
+          <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        </div>
+        <div class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="signup-container">
+    <div class="signup-header">
+      <h2>Create Your Account</h2>
+    </div>
+    <form id="signup-form" class="signup-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" />
+        <div class="error" id="name-error" aria-live="polite"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+        <div class="error" id="email-error" aria-live="polite"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Create a password" />
+        <div class="password-strength">
+          <div class="password-strength-bar" id="strength-bar"></div>
+        </div>
+        <div class="strength-text" id="strength-text"></div>
+        <div class="error" id="password-error" aria-live="polite"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="Confirm your password" />
+        <div class="error" id="confirm-password-error" aria-live="polite"></div>
+      </div>
+
+      <button type="submit" class="signup-button">Sign Up</button>
+    </form>
+    <div class="login-link">
+      Already have an account? <a href="login.html">Login here</a>
+    </div>
+    <div class="success" id="success-message" aria-live="polite">Sign-up successful! Redirecting...</div>
+  </div>
+
+  <script>
+    // Load theme on start
+    const theme = localStorage.getItem("theme");
+    if (theme === "dark") {
+      document.body.classList.add("dark-mode");
+    }
+
+    // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    const toggleBall = document.querySelector('.toggle-ball');
+    
+    // Apply saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      toggleBall.style.transform = 'translateX(30px)';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggleBall.style.transform = document.body.classList.contains('dark-mode') ? 'translateX(30px)' : 'translateX(0)';
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    const form = document.getElementById("signup-form");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm-password");
+
+    const nameError = document.getElementById("name-error");
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+    const confirmPasswordError = document.getElementById("confirm-password-error");
+    const successMessage = document.getElementById("success-message");
+
+    const strengthBar = document.getElementById("strength-bar");
+    const strengthText = document.getElementById("strength-text");
+
+    passwordInput.addEventListener("input", () => {
+      const val = passwordInput.value;
+      let strength = 0;
+      if (val.match(/[a-z]/)) strength++;
+      if (val.match(/[A-Z]/)) strength++;
+      if (val.match(/[0-9]/)) strength++;
+      if (val.match(/[^a-zA-Z0-9]/)) strength++;
+
+      let width = ["25%", "50%", "75%", "100%"][strength - 1] || "0%";
+      let color = ["red", "orange", "blue", "green"][strength - 1] || "#ccc";
+      let label = ["Weak", "Fair", "Good", "Strong"][strength - 1] || "";
+
+      strengthBar.style.width = width;
+      strengthBar.style.backgroundColor = color;
+      strengthText.textContent = label;
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      let valid = true;
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      nameError.textContent = "";
+      emailError.textContent = "";
+      passwordError.textContent = "";
+      confirmPasswordError.textContent = "";
+      successMessage.style.display = "none";
+
+      if (!name) {
+        nameError.textContent = "Please enter your name.";
+        nameError.style.display = "block";
+        valid = false;
+      }
+
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        emailError.textContent = "Please enter a valid email.";
+        emailError.style.display = "block";
+        valid = false;
+      }
+
+      if (password.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters.";
+        passwordError.style.display = "block";
+        valid = false;
+      }
+
+      if (password !== confirmPassword) {
+        confirmPasswordError.textContent = "Passwords do not match.";
+        confirmPasswordError.style.display = "block";
+        valid = false;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const emailExists = users.some(user => user.email === email);
+      if (emailExists) {
+        emailError.textContent = "Email is already registered.";
+        emailError.style.display = "block";
+        valid = false;
+      }
+
+      if (valid) {
+        users.push({ name, email, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      }
+    });
+  </script>
+</body>
+</html>

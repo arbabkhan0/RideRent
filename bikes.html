@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bikes | RideRent - Premium Car and Bike Rentals</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+        /* Page-specific styles */
+        .page-header {
+            background-image: linear-gradient(rgba(19, 21, 21, 0.7), rgba(19, 21, 21, 0.7)), url('https://ik.imagekit.io/r5wsp5fo2/bikebanner.png?updatedAt=1745429632108');
+            background-size: cover;
+            background-position: center;
+            color: var(--light);
+            text-align: center;
+            padding: 150px 0 80px;
+        }
+        
+        .dark-mode .page-header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url('https://ik.imagekit.io/r5wsp5fo2/bikebanner.png?updatedAt=1745429632108');
+        }
+        
+        .page-header h1 {
+            text-align: left;
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--light);
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .page-header p {
+            text-align: left;
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+        
+        .filter-options {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 50px;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .filter-options {
+            background-color: rgba(19, 21, 21, 0.8);
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--light);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .filter-group select,
+        .dark-mode .filter-group input {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: var(--light);
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .filter-button {
+            align-self: flex-end;
+            margin-top: 26px;
+        }
+        
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .results-count {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sort-options label {
+            font-weight: 500;
+        }
+        
+        .sort-options select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--light);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .sort-options select {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: var(--light);
+        }
+        
+        .sort-options select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .bike-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .vehicle-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .vehicle-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .vehicle-card:hover .vehicle-image img {
+            transform: scale(1.05);
+        }
+        
+        .vehicle-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(var(--primary-rgb), 0.9);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .vehicle-details {
+            padding: 20px;
+        }
+        
+        .vehicle-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .vehicle-title h3 {
+            font-size: 1.25rem;
+            margin: 0;
+            color: var(--text-primary);
+        }
+        
+        .vehicle-price {
+            text-align: right;
+        }
+        
+        .vehicle-price .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .vehicle-price .period {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .bike-detail-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .bike-detail-specs .spec {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .bike-detail-specs .spec i {
+            color: var(--primary);
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .total-price {
+            display: block;
+            margin: 15px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .favorite-btn {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .no-results {
+            grid-column: span 3;
+            text-align: center;
+            padding: 50px 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        
+        .pagination-button {
+            background-color: var(--light);
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .pagination-button {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: var(--light);
+        }
+        
+        .pagination-button.active {
+            background-color: var(--primary);
+            color: var(--light);
+            border-color: var(--primary);
+        }
+        
+        .pagination-button:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .dark-mode .pagination-button:hover:not(.active) {
+            background-color: #333;
+        }
+        
+        .filter-group input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: var(--light);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .filter-group input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+        }
+
+        .dark-mode .filter-group input[type="date"] {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: var(--light);
+        }
+
+        .dark-mode .filter-group input[type="date"]:focus {
+            border-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-button {
+                width: 100%;
+                margin-top: 15px;
+            }
+            
+            .results-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .bike-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* User menu styles */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome-text {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .dark-mode .welcome-text {
+            color: var(--light);
+        }
+
+        .auth-buttons, .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-buttons .btn, .user-menu .btn {
+            padding: 8px 16px;
+            min-width: 100px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .user-menu {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .welcome-text {
+                text-align: center;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+        <div class="toggle-ball"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <h1><a href="../index.html"><span>Ride</span>Rent</a></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="cars.html">Cars</a></li>
+                    <li><a href="bikes.html" class="active">Bikes</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="auth-buttons" id="auth-buttons">
+                    <a href="login.html" class="btn btn-secondary" id="login-btn">Login</a>
+                    <a href="signup.html" class="btn btn-primary" id="signup-btn">Sign Up</a>
+                </div>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <span class="welcome-text">Welcome, <span id="username"></span></span>
+                    <a href="profile.html" class="btn btn-secondary">My Profile</a>
+                    <a href="#" class="btn btn-primary" id="logout-btn">Logout</a>
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Bike Fleet</h1>
+            <p>Choose from our selection of premium bikes for your next adventure</p>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="filter-options">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="bike-type">Bike Type</label>
+                        <select id="bike-type">
+                            <option value="all">All Types</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Naked">Naked</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Cruiser">Cruiser</option>
+                            <option value="Scooter">Scooter</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price-range">Daily Price Range</label>
+                        <select id="price-range">
+                            <option value="all">All Prices</option>
+                            <option value="budget">Budget (₹1,500-₹2,250)</option>
+                            <option value="mid">Mid-Range (₹2,250-₹3,000)</option>
+                            <option value="premium">Premium (₹3,000+)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="start-date">Start Date</label>
+                        <input type="date" id="start-date" min="">
+                    </div>
+                    <div class="filter-group">
+                        <label for="end-date">End Date</label>
+                        <input type="date" id="end-date" min="">
+                    </div>
+                    <div class="filter-button">
+                        <button class="btn btn-primary" id="apply-filters">Find Bikes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-info">
+                <div class="results-count" id="results-count">Showing 9 bikes</div>
+                <div class="sort-options">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="relevance">Relevance</option>
+                        <option value="type-az">Bike Type: A to Z</option>
+                        <option value="type-za">Bike Type: Z to A</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-az">Name: A to Z</option>
+                        <option value="name-za">Name: Z to A</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bike-grid" id="bike-grid">
+                <!-- Bike cards will be dynamically inserted here using JavaScript -->
+            </div>
+
+            <div class="pagination" id="pagination">
+                <button class="pagination-button active">1</button>
+                <button class="pagination-button">2</button>
+                <button class="pagination-button"><i class="fas fa-angle-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Join Our Newsletter</h2>
+                <p>Subscribe to receive special offers, news, and updates!</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <h2><span>Ride</span>Rent</h2>
+                    </div>
+                    <p>Premium car and bike rentals for your travel needs. Experience the best vehicles for your journey.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="cars.html">Cars</a></li>
+                        <li><a href="bikes.html">Bikes</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Help & Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Customer Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Main Street, New York, NY 10001</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@riderent.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Mon-Fri: 9AM - 9PM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RideRent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="vehicles-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Check login state
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('username');
+            const authButtons = document.getElementById('auth-buttons');
+            const userMenu = document.getElementById('user-menu');
+            const usernameSpan = document.getElementById('username');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Update UI based on login state
+            function updateAuthUI() {
+                if (isLoggedIn && username) {
+                    authButtons.style.display = 'none';
+                    userMenu.style.display = 'flex';
+                    usernameSpan.textContent = username;
+                } else {
+                    authButtons.style.display = 'flex';
+                    userMenu.style.display = 'none';
+                }
+            }
+
+            // Handle logout
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                window.location.href = '../index.html';
+            });
+
+            // Initial UI update
+            updateAuthUI();
+
+            // Get DOM elements
+            const bikeTypeFilter = document.getElementById('bike-type');
+            const priceRangeFilter = document.getElementById('price-range');
+            const applyFiltersBtn = document.getElementById('apply-filters');
+            const sortBySelect = document.getElementById('sort-by');
+            const bikeGrid = document.getElementById('bike-grid');
+            const resultsCount = document.getElementById('results-count');
+            const pagination = document.getElementById('pagination');
+
+            // Initialize variables
+            let filteredBikes = [...bikesData];
+            let currentPage = 1;
+            const itemsPerPage = 6;
+
+            // Initial render
+            renderBikes(filteredBikes);
+            setupPagination(filteredBikes.length);
+
+            // Event listeners
+            applyFiltersBtn.addEventListener('click', filterBikes);
+            sortBySelect.addEventListener('change', sortBikes);
+
+            // Set minimum date to today for both date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('start-date').min = today;
+            document.getElementById('end-date').min = today;
+
+            // Update end date minimum when start date changes
+            document.getElementById('start-date').addEventListener('change', function() {
+                document.getElementById('end-date').min = this.value;
+            });
+
+            // Validate dates when applying filters
+            document.getElementById('apply-filters').addEventListener('click', function() {
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+
+                if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+                    alert('End date must be after start date');
+                    return;
+                }
+
+                // Continue with existing filter logic
+                filterBikes();
+            });
+
+            // Filter bikes
+            function filterBikes() {
+                const bikeType = bikeTypeFilter.value;
+                const priceRange = priceRangeFilter.value;
+                
+                // Reset current page when filtering
+                currentPage = 1;
+                
+                // Filter bikes based on selected criteria
+                filteredBikes = bikesData.filter(bike => {
+                    // Filter by bike type
+                    if (bikeType !== 'all' && bike.type !== bikeType) {
+                        return false;
+                    }
+                    
+                    // Filter by price range
+                    if (priceRange !== 'all') {
+                        if (priceRange === 'budget' && (bike.price < 1500 || bike.price > 2250)) {
+                            return false;
+                        } else if (priceRange === 'mid' && (bike.price < 2250 || bike.price > 3000)) {
+                            return false;
+                        } else if (priceRange === 'premium' && bike.price < 3000) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                });
+                
+                // Apply sorting
+                sortBikes();
+                
+                // Update UI
+                renderBikes(filteredBikes);
+                updateResultsCount(filteredBikes.length);
+                setupPagination(filteredBikes.length);
+            }
+            
+            // Bike sorting function
+            function sortBikes() {
+                const sortBy = sortBySelect.value;
+                
+                // Create a copy of the filtered bikes array to avoid modifying the original
+                let sortedBikes = [...filteredBikes];
+                
+                switch (sortBy) {
+                    case 'type-az':
+                        sortedBikes.sort((a, b) => a.type.localeCompare(b.type));
+                        break;
+                    case 'type-za':
+                        sortedBikes.sort((a, b) => b.type.localeCompare(a.type));
+                        break;
+                    case 'price-low':
+                        sortedBikes.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-high':
+                        sortedBikes.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'name-az':
+                        sortedBikes.sort((a, b) => a.name.localeCompare(b.name));
+                        break;
+                    case 'name-za':
+                        sortedBikes.sort((a, b) => b.name.localeCompare(a.name));
+                        break;
+                    default:
+                        // Default sorting (relevance) - keep original order
+                        sortedBikes = [...filteredBikes];
+                }
+                
+                // Update the filteredBikes with the sorted array
+                filteredBikes = sortedBikes;
+                
+                // Re-render the bikes with the new sorting
+                renderBikes(filteredBikes);
+                setupPagination(filteredBikes.length);
+            }
+            
+            // Render bike cards
+            function renderBikes(bikes) {
+                bikeGrid.innerHTML = '';
+                
+                if (bikes.length === 0) {
+                    bikeGrid.innerHTML = '<div class="no-results">No bikes found matching your criteria. Try adjusting your filters.</div>';
+                    return;
+                }
+                
+                // Calculate page range
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, bikes.length);
+                const currentBikes = bikes.slice(startIndex, endIndex);
+                
+                currentBikes.forEach(bike => {
+                    const bikeCard = document.createElement('div');
+                    bikeCard.className = 'vehicle-card';
+                    
+                    bikeCard.innerHTML = `
+                        <div class="vehicle-image">
+                            <img src="${bike.image}" alt="${bike.name}" class="img-fluid" onerror="this.src='../images/placeholder.jpg'">
+                            <span class="vehicle-category">${bike.type}</span>
+                        </div>
+                        <div class="vehicle-details">
+                            <div class="vehicle-title">
+                                <h3>${bike.name}</h3>
+                                <div class="vehicle-price">
+                                    <span class="price">₹${bike.price.toLocaleString('en-IN')}</span>
+                                    <span class="period">/ day</span>
+                                </div>
+                            </div>
+                            <div class="bike-detail-specs">
+                                <div class="spec">
+                                    <i class="fas fa-motorcycle"></i>
+                                    <span>${bike.engine}</span>
+                                </div>
+                                <div class="spec">
+                                    <i class="fas fa-cogs"></i>
+                                    <span>${bike.transmission}</span>
+                                </div>
+                                <div class="spec">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <span>${bike.fuelType}</span>
+                                </div>
+                                <div class="spec">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <span>${bike.mileage}</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="booking.html?id=${bike.id}&type=bike&start_date=${document.getElementById('start-date').value}&end_date=${document.getElementById('end-date').value}" class="btn btn-primary">Book Now</a>
+                                <button class="btn btn-outline favorite-btn">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add event listener for favorite button
+                    const favoriteBtn = bikeCard.querySelector('.favorite-btn');
+                    favoriteBtn.addEventListener('click', function() {
+                        const icon = this.querySelector('i');
+                        if (icon.classList.contains('far')) {
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                            icon.style.color = '#ff4d4d';
+                        } else {
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            icon.style.color = '';
+                        }
+                    });
+                    
+                    bikeGrid.appendChild(bikeCard);
+                });
+            }
+            
+            // Update results count
+            function updateResultsCount(count) {
+                resultsCount.textContent = `Showing ${count} bike${count !== 1 ? 's' : ''}`;
+            }
+            
+            // Setup pagination
+            function setupPagination(totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                pagination.innerHTML = '';
+                
+                // Previous button
+                if (currentPage > 1) {
+                    const prevButton = document.createElement('button');
+                    prevButton.className = 'pagination-button';
+                    prevButton.innerHTML = '<i class="fas fa-angle-left"></i>';
+                    prevButton.addEventListener('click', () => {
+                        currentPage--;
+                        renderBikes(filteredBikes);
+                        setupPagination(totalItems);
+                    });
+                    pagination.appendChild(prevButton);
+                }
+                
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.className = 'pagination-button';
+                    if (i === currentPage) {
+                        pageButton.classList.add('active');
+                    }
+                    pageButton.textContent = i;
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        renderBikes(filteredBikes);
+                        setupPagination(totalItems);
+                    });
+                    pagination.appendChild(pageButton);
+                }
+                
+                // Next button
+                if (currentPage < totalPages) {
+                    const nextButton = document.createElement('button');
+                    nextButton.className = 'pagination-button';
+                    nextButton.innerHTML = '<i class="fas fa-angle-right"></i>';
+                    nextButton.addEventListener('click', () => {
+                        currentPage++;
+                        renderBikes(filteredBikes);
+                        setupPagination(totalItems);
+                    });
+                    pagination.appendChild(nextButton);
+                }
+            }
+            
+            // Check theme preference on page load
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.toggle-ball').style.transform = 'translateX(30px)';
+            }
+            
+            // Theme toggle
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                
+                // Move toggle ball with animation
+                const toggleBall = document.querySelector('.toggle-ball');
+                if (document.body.classList.contains('dark-mode')) {
+                    toggleBall.style.transform = 'translateX(30px)';
+                } else {
+                    toggleBall.style.transform = 'translateX(0)';
+                }
+                
+                // Save theme preference
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+            
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html> 
